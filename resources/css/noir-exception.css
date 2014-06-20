@@ -1,0 +1,96 @@
+body {
+ background: #2a2b2b;
+ line-height: 1.5;
+ color: #d1d9e1;
+ padding: 60px 80px;
+ font-family: 'Helvetica Neue',Helvetica,Verdana;
+}
+
+table {
+border-collapse: separate;
+border-spacing: 0;
+}
+
+caption, th, td {
+text-align: left;
+font-weight: normal;
+float:none !important;
+}
+table, th, td {
+vertical-align: middle;
+}
+
+h1 {
+ margin-bottom: 0px;
+ color: #d1d9e1;
+}
+h2 {
+ margin-top: 10px;
+ margin-left: 60px;
+ font-size: 18px;
+ font-weight: normal;
+}
+code {
+ float: left;
+ display: inline;
+ border-radius: 8px;
+ padding: 10px;
+ background: #474949;
+ border: 2px solid #616363;
+ font-family: Monaco, Consolas, 'Courier New';
+}
+#exception {
+ max-width: 900px;
+}
+#exception h1 {
+ font-size: 24px;
+}
+
+#exception ul {
+ margin: 0;
+ padding: 0;
+ margin-top: 20px;
+ list-style: none;
+}
+
+#exception table {
+ width: 100%;
+ margin-top: 20px;
+ border-collapse: collapse;
+}
+
+#exception tr {
+ border-radius: 8px;
+ padding: 10px;
+ background: #474949;
+ border: 2px solid #616363;
+ margin-bottom: 10px;
+ width: 100%;
+}
+
+#exception td {
+ padding: 10px;
+}
+
+#exception .dt {
+ text-align: right;
+}
+
+#exception .dd {
+ color: #91979d;
+ margin: 0;
+ padding-left: 5%;
+}
+
+#exception h1 span {
+ font-size: 18px;
+ font-weight: normal;
+ color: #91979d;
+}
+
+#exception .mine {
+ border-radius: 8px;
+ padding: 10px;
+ background: #3f634d;
+ border: 2px solid #3c8455;
+}
