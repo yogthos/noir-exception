@@ -4,10 +4,12 @@
            [clj-stacktrace.core :refer [parse-exception]]))
 
 (def project-path
-  (-> (System/getProperties)
-      (.get "clojure.compile.path")
-      (.split "/target")
-      first))
+  (try
+    (-> (System/getProperties)
+        (.get "clojure.compile.path")
+        (.split "/target")
+        first)
+    (catch Exception _)))
 
 (defn resource [file]
  (-> (Thread/currentThread)
@@ -110,7 +112,7 @@
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))
 
-(defn wrap-internal-error [handler & [log-fn]]
+(defn wrap-internal-error [handler & [{:keys [log-fn error-response]}]]
   (fn [request]
     (try (handler request)
       (catch Throwable t
@@ -119,7 +121,7 @@
          :headers {"Content-Type" "text/html"}
          :body internal-error}))))
 
-(defn wrap-exceptions [handler & [quiet?]]
+(defn wrap-exceptions [handler & [quiet]]
  (if quiet?
    handler
    (fn [request]
