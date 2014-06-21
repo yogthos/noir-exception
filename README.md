@@ -6,6 +6,7 @@ We missed `noir` exceptions. `noir-exception` brings back `noir` styled back tra
 for the browser. You will easily find problems with your code because
 `noir-exception` highlights your namespaces with a diferent color.
 
+![exception trace](https://raw.githubusercontent.com/yogthos/noir-exception/master/exception.png)
 Install
 -------
 Add the following dependency to your `project.clj` file:
@@ -16,11 +17,11 @@ Usage
 -------
 The library provides two middlware functions called `wrap-exceptions` and `wrap-internal-error`.
 
-The `wrap-exceptions` function will created styled stacktraces to highlight local namespaces.
-This is useful for quickly seeing stacktraces during development.
+The `wrap-exceptions` function will create styled stacktraces to highlight local namespaces.
+This is useful for quickly identifying what matters most in stacktraces during development.
 
 If you have, as an example, <em>development</em> and <em>production</em> profiles,
-use the `quiet?` optional flag so set the profile - `#(wrap-exceptions % quiet?)`.
+use the `quiet?` optional flag to set the profile - `#(wrap-exceptions % quiet?)`.
 If you always want to show the stack traces, just use `wrap-exceptions`.
 ```clj
 (ns my.ns
