@@ -3,39 +3,41 @@
            [hiccup.page :refer [html5]]
            [clj-stacktrace.core :refer [parse-exception]]))
 
-(defn project-path []
- (-> (System/getProperties)
-   (.get "clojure.compile.path")
-   (.split "/target")
-   first))
-
-(defn get-ns-name [file]
- (with-open [rdr (java.io.PushbackReader. (clojure.java.io/reader file))]
-   (binding [*read-eval* false]
-     (second (read rdr)))))
-
-(defn clj? [file]
- (let [name (.getName file)]
-   (and (not (.endsWith name "project.clj"))
-             (.endsWith name ".clj"))))
-
-(defn list-namespaces []
- (->> (project-path)
-      clojure.java.io/file
-      file-seq
-      (filter clj?)
-      (map get-ns-name)))
+(def project-path
+  (-> (System/getProperties)
+      (.get "clojure.compile.path")
+      (.split "/target")
+      first))
 
 (defn resource [file]
  (-> (Thread/currentThread)
      (.getContextClassLoader)
      (.getResource file)))
 
+(def exception-css
+  (slurp (resource "css/noir-exception.css")))
+
+(def get-ns-name
+  (memoize
+    (fn [file]
+      (with-open [rdr (java.io.PushbackReader. (clojure.java.io/reader file))]
+        (binding [*read-eval* false]
+          (second (read rdr)))))))
+
+(def clj? (memoize (fn [file] (-> file .getName (.endsWith ".clj")))))
+
+(defn list-namespaces []
+ (->> project-path
+      clojure.java.io/file
+      file-seq
+      (filter clj?)
+      (map get-ns-name)))
+
 (defn layout [& content]
  (html5
    [:head
     [:title "Server Error"]
-    [:style (slurp (resource "css/noir-exception.css"))]]
+    [:style exception-css]]
    [:body content]))
 
 (defn exception-item [{:keys[in-ns? fully-qualified file line]}]
@@ -56,8 +58,7 @@
             (catch Throwable e))])]))
 
 (defn route-fn? [k]
- (and k
-      (re-seq #".*--" k)))
+ (and k (re-seq #".*--" k)))
 
 (defn key->route-fn [k]
  (if (route-fn? k)
@@ -69,9 +70,11 @@
        (string/replace #"(POST|GET|HEAD|ANY|PUT|DELETE)" #(str (first %1) " :: ")))
    k))
 
-(defn local-ns? [n]
- (when n
-   (->> (list-namespaces) (filter symbol?) (map name) (some #(.contains n (name %))))))
+(def local-ns?
+  (memoize
+   (fn [n]
+     (when n
+       (->> (list-namespaces) (filter symbol?) (map name) (some #(.contains n (name %))))))))
 
 (defn ex-item [{anon :annon-fn func :fn nams :ns clj? :clojure f :file line :line :as ex}]
  (let [func-name (if (and anon func (re-seq #"eval" func))
