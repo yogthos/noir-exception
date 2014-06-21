@@ -121,7 +121,7 @@
          :headers {"Content-Type" "text/html"}
          :body internal-error}))))
 
-(defn wrap-exceptions [handler & [quiet]]
+(defn wrap-exceptions [handler & [quiet?]]
  (if quiet?
    handler
    (fn [request]
