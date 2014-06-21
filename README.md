@@ -38,7 +38,11 @@ If you always want to show the stack traces, just use `wrap-exceptions`.
 The `wrap-internal-error` function allows catching errors and producing a standard error page.
 This function should be used for handling errors in production, where you do not wish to expose
 the internals of the application to the user. The function will print the stacktrace to standard
-out by default. Alternatively, it can be passed an optional log function to log the exception.
+out by default.
+
+The function accepts two keyword arguments, maned `:log-fn`  and `:error-response`. The first
+allows providing a custom log function for the exceptions and the second can be used to supply
+a custom error response.
 
 ```clj
 (ns my.ns
@@ -48,7 +52,11 @@ out by default. Alternatively, it can be passed an optional log function to log 
 
 (def app
   (app-handler [routes]
-    :middleware [#(wrap-internal-error % (fn [e] (timbre/error e)))]))
+    :middleware [#(wrap-internal-error %
+                    :log-fn (fn [e] (timbre/error e))
+                    :error-response {:status 500
+                                     :headers {"Content-Type" "text/html"}
+                                     :body "something bad happened!"})]))
 ```
 
 
