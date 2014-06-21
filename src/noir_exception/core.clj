@@ -107,8 +107,9 @@
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))
 
-(defn wrap-exceptions [handler dev?]
- (if dev?
+(defn wrap-exceptions [handler & [quiet?]]
+ (if quiet?
+   handler
    (fn [request]
      (try
        (handler request)
@@ -120,5 +121,4 @@
                   (stack-trace (parse-ex e))
                   (catch Throwable ex
                     (.printStackTrace ex)
-                    internal-error))})))
-   handler))
+                    internal-error))})))))
