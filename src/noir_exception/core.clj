@@ -34,7 +34,7 @@
 (defn layout [& content]
  (html5
    [:head
-    [:title "Noir Exception"]
+    [:title "Server Error"]
     [:style (slurp (resource "css/noir-exception.css"))]]
    [:body content]))
 
@@ -71,7 +71,7 @@
 
 (defn local-ns? [n]
  (when n
-   (->> (list-namespaces) (map name) (some #(.contains n (name %))))))
+   (->> (list-namespaces) (filter symbol?) (map name) (some #(.contains n (name %))))))
 
 (defn ex-item [{anon :annon-fn func :fn nams :ns clj? :clojure f :file line :line :as ex}]
  (let [func-name (if (and anon func (re-seq #"eval" func))
@@ -106,6 +106,15 @@
     [:h1 "Something very bad has happened."]
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))
+
+(defn wrap-internal-error [handler & [log-fn]]
+  (fn [request]
+    (try (handler request)
+      (catch Throwable t
+        (if log-fn (log-fn t) (.printStackTrace t))
+        {:status 500
+         :headers {"Content-Type" "text/html"}
+         :body internal-error}))))
 
 (defn wrap-exceptions [handler & [quiet?]]
  (if quiet?
