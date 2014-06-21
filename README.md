@@ -6,6 +6,7 @@ We missed `noir` exceptions. `noir-exception` brings back `noir` styled back tra
 for the browser. You will easily find problems with your code because
 `noir-exception` highlights your namespaces with a diferent color.
 
+![exception trace](https://raw.githubusercontent.com/yogthos/noir-exception/master/exception.png)
 Install
 -------
 Add the following dependency to your `project.clj` file:
