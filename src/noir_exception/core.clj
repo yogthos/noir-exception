@@ -111,7 +111,7 @@
 
 (def internal-error
  (layout
-   [:div#not-found
+   [:div.internal-error
     [:h1 "Something very bad has happened."]
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))

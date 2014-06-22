@@ -21,7 +21,7 @@ vertical-align: middle;
 h1 {
  margin-bottom: 0px;
   margin-bottom: 10px;
- color: #333;
+ color: #000;
 }
 
 h2 {
@@ -31,13 +31,6 @@ h2 {
 
 h2 span {
   color: #666;
-}
-
-#not-found {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  width: 900px;
 }
 
 .internal-error {
@@ -52,6 +45,12 @@ h2 span {
   font-size 30px;
   border: solid;
   border-color: #444;
+}
+
+div.internal-error h1, p {
+  margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }
 
 .jh-root {
