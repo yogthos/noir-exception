@@ -4,9 +4,15 @@ Middleware for displaying `noir` style exceptions in the browser.
 
 We missed `noir` exceptions. `noir-exception` brings back `noir` styled back traces
 for the browser. You will easily find problems with your code because
-`noir-exception` highlights your namespaces with a diferent color.
+`noir-exception` highlights your namespaces with a diferent color. The exception will
+be displayed along with the request that caused it.
 
 ![exception trace](https://raw.githubusercontent.com/yogthos/noir-exception/master/exception.png)
+
+...
+
+![request](https://raw.githubusercontent.com/yogthos/noir-exception/master/request.png)
+
 Install
 -------
 Add the following dependency to your `project.clj` file:
