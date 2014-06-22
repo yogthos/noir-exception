@@ -1,7 +1,8 @@
 (ns noir-exception.core
  (:require [clojure.string :as string]
            [hiccup.page :refer [html5]]
-           [clj-stacktrace.core :refer [parse-exception]]))
+           [clj-stacktrace.core :refer [parse-exception]]
+           [json-html.core :refer [edn->html]]))
 
 (def project-path
   (try
@@ -15,6 +16,9 @@
  (-> (Thread/currentThread)
      (.getContextClassLoader)
      (.getResource file)))
+
+(def json-css
+  (slurp (resource "json.human.css")))
 
 (def exception-css
   (slurp (resource "css/noir-exception.css")))
@@ -39,7 +43,7 @@
  (html5
    [:head
     [:title "Server Error"]
-    [:style exception-css]]
+    [:style (str json-css exception-css)]]
    [:body content]))
 
 (defn exception-item [{:keys[in-ns? fully-qualified file line]}]
@@ -48,16 +52,16 @@
    [:td.dd fully-qualified]])
 
 (defn stack-trace [{:keys [exception causes]}]
- (layout
-   [:div#exception
-    [:h1 (or (:message exception) "An exception was thrown") [:span " - (" (:class exception) ")"]]
+  [:div#exception
+    [:h2 "message: " [:span (or (:message exception) "N/A")]]
+    [:h2 "class: " [:span "(" (:class exception) ")"]]
     [:table [:tbody (map exception-item (:trace-elems exception))]]
       (for [cause causes :while cause]
         [:div.cause
           (try
             [:h3 "Caused by: " (:class cause) " - " (:message cause)]
             [:table (map exception-item (:trimmed-elems cause))]
-            (catch Throwable e))])]))
+            (catch Throwable e))])])
 
 (defn route-fn? [k]
  (and k (re-seq #".*--" k)))
@@ -132,7 +136,13 @@
          {:status 500
           :headers {"Content-Type" "text/html"}
           :body (try
-                  (stack-trace (parse-ex e))
+                  (layout
+                   [:h1.internal-error "Internal Error: 500"]
+                   [:div
+                    (stack-trace (parse-ex e))
+
+                    [:h2 "Request"]
+                    (edn->html request)])
                   (catch Throwable ex
                     (.printStackTrace ex)
                     internal-error))})))))

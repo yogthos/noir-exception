@@ -1,5 +1,4 @@
 body {
- background: #2a2b2b;
  line-height: 1.5;
  color: #d1d9e1;
  padding: 60px 80px;
@@ -21,13 +20,17 @@ vertical-align: middle;
 
 h1 {
  margin-bottom: 0px;
- color: #d1d9e1;
+  margin-bottom: 10px;
+ color: #333;
 }
+
 h2 {
- margin-top: 10px;
- margin-left: 60px;
- font-size: 18px;
  font-weight: normal;
+ color: #444;
+}
+
+h2 span {
+  color: #666;
 }
 
 #not-found {
@@ -37,15 +40,26 @@ h2 {
   width: 900px;
 }
 
-#exception {
- margin-left: auto;
- margin-right: auto;
- text-align: center;
- width: 900px;
+.internal-error {
+  margin-left: -100px;
+  margin-right: -100px;
+  margin-top: -80px;
+  padding: 20px;
+  width: 100%;
+  position: absolute;
+  color: white;
+  background: #CC3300;
+  font-size 30px;
+  border: solid;
+  border-color: #444;
 }
 
-#exception h1 {
- font-size: 24px;
+.jh-root {
+  width: 550px;
+}
+
+#exception {
+ width: 945px;
 }
 
 #exception ul {
@@ -64,8 +78,8 @@ h2 {
 #exception tr {
  border-radius: 8px;
  padding: 10px;
- background: #474949;
- border: 2px solid #616363;
+ background: #f5f5f5;
+ border: 2px solid #ccc;
  margin-bottom: 10px;
  width: 100%;
 }
@@ -75,6 +89,7 @@ h2 {
 }
 
 #exception .dt {
+  color: #bbb;
  text-align: right;
 }
 
@@ -84,15 +99,18 @@ h2 {
  padding-left: 5%;
 }
 
-#exception h1 span {
- font-size: 18px;
- font-weight: normal;
- color: #91979d;
-}
-
 #exception .mine {
  border-radius: 8px;
  padding: 10px;
- background: #3f634d;
- border: 2px solid #3c8455;
+ background: #FF9933;
+ border: 2px solid #993300;
+}
+
+#exception tr.mine .dt {
+  color: black;
+}
+
+#exception tr.mine .dd {
+  color: black;
+  font-weight: bold;
 }
