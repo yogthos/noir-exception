@@ -40,7 +40,7 @@ This function should be used for handling errors in production, where you do not
 the internals of the application to the user. The function will print the stacktrace to standard
 out by default.
 
-The function accepts two keyword arguments, maned `:log-fn`  and `:error-response`. The first
+The function accepts two keyword arguments, maned `:log`  and `:error-response`. The first
 allows providing a custom log function for the exceptions and the second can be used to supply
 a custom error response.
 
@@ -53,7 +53,7 @@ a custom error response.
 (def app
   (app-handler [routes]
     :middleware [#(wrap-internal-error %
-                    :log-fn (fn [e] (timbre/error e))
+                    :log (fn [e] (timbre/error e))
                     :error-response {:status 500
                                      :headers {"Content-Type" "text/html"}
                                      :body "something bad happened!"})]))

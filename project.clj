@@ -1,4 +1,4 @@
-(defproject noir-exception "0.2.0"
+(defproject noir-exception "0.2.1"
  :description "middleware for displaying Noir style exceptions in the browser"
  :url "https://github.com/yogthos/noir-exception"
  :license {:name "Eclipse Public License"

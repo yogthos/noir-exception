@@ -112,11 +112,11 @@
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))
 
-(defn wrap-internal-error [handler & {:keys [log-fn error-response]}]
+(defn wrap-internal-error [handler & {:keys [log error-response]}]
   (fn [request]
     (try (handler request)
       (catch Throwable t
-        (if log-fn (log-fn t) (.printStackTrace t))
+        (if log (log t) (.printStackTrace t))
         {:status 500
          :headers {"Content-Type" "text/html"}
          :body (or error-response internal-error)}))))
