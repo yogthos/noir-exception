@@ -17,7 +17,7 @@ Install
 -------
 Add the following dependency to your `project.clj` file:
 
-[![clojars version](https://clojars.org/noir-exception/latest-version.svg?raw=true)](https://clojars.org/noir-exception)
+[![Clojars Project](http://clojars.org/noir-exception/latest-version.svg)](http://clojars.org/noir-exception)
 
 Usage
 -------
