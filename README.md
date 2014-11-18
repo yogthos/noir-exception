@@ -50,6 +50,11 @@ The function accepts two keyword arguments, maned `:log`  and `:error-response`.
 allows providing a custom log function for the exceptions and the second can be used to supply
 a custom error response.
 
+Alterntaively, it's possible to supply the `:error-response-handler` key that points to a function
+which should accept the request as a paremeter and return a string response that will be returned
+to the client. This can be useful for generating contextual errors based on the contents of the
+request.
+
 ```clj
 (ns my.ns
   (:require [taoensso.timbre :as timbre]
