@@ -124,8 +124,8 @@
         {:status 500
          :headers {"Content-Type" "text/html"}
          :body (if error-response-handler
-                 (error-response-handler request)  
-                 (or error-response internal-error)})))))
+                 (error-response-handler request)
+                 (or error-response internal-error))}))))
 
 (defn wrap-exceptions [handler & [quiet?]]
  (if quiet?
