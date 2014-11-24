@@ -21,10 +21,10 @@ Add the following dependency to your `project.clj` file:
 
 Usage
 -------
-The library provides two middlware functions called `wrap-exceptions` and `wrap-internal-error`.
+The library provides two middleware functions called `wrap-exceptions` and `wrap-internal-error`.
 
-The `wrap-exceptions` function will create styled stacktraces to highlight local namespaces.
-This is useful for quickly identifying what matters most in stacktraces during development.
+The `wrap-exceptions` function will create styled stack traces to highlight local namespaces.
+This is useful for quickly identifying what matters most in stack traces during development.
 
 If you have, as an example, <em>development</em> and <em>production</em> profiles,
 use the `quiet?` optional flag to set the profile - `#(wrap-exceptions % quiet?)`.
@@ -43,14 +43,14 @@ If you always want to show the stack traces, just use `wrap-exceptions`.
 
 The `wrap-internal-error` function allows catching errors and producing a standard error page.
 This function should be used for handling errors in production, where you do not wish to expose
-the internals of the application to the user. The function will print the stacktrace to standard
+the internals of the application to the user. The function will print the stack trace to standard
 out by default.
 
 The function accepts two keyword arguments, maned `:log`  and `:error-response`. The first
 allows providing a custom log function for the exceptions and the second can be used to supply
 a custom error response.
 
-Alterntaively, it's possible to supply the `:error-response-handler` key that points to a function
+Alternatively, it's possible to supply the `:error-response-handler` key that points to a function
 which should accept the request as a paremeter and return a string response that will be returned
 to the client. This can be useful for generating contextual errors based on the contents of the
 request.
