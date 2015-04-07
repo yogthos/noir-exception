@@ -46,14 +46,14 @@ This function should be used for handling errors in production, where you do not
 the internals of the application to the user. The function will print the stack trace to standard
 out by default.
 
-The function accepts two keyword arguments, maned `:log`  and `:error-response`. The first
+The function accepts two keyword arguments, named `:log`  and `:error-response`. The first
 allows providing a custom log function for the exceptions and the second can be used to supply
 a custom error response.
 
-Alternatively, it's possible to supply the `:error-response-handler` key that points to a function
-which should accept the request as a paremeter and return a string response that will be returned
-to the client. This can be useful for generating contextual errors based on the contents of the
-request.
+Alternatively to `:error-response`, it's possible to supply the `:error-response-handler` key that
+points to a function which should accept the request as a parameter and return a string response
+that will be returned to the client. This can be useful for generating contextual errors based on
+the contents of the request.
 
 ```clj
 (ns my.ns
