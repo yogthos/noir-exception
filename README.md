@@ -51,9 +51,9 @@ allows providing a custom log function for the exceptions and the second can be 
 a custom error response.
 
 Alternatively to `:error-response`, it's possible to supply the `:error-response-handler` key that
-points to a function which should accept the request as a parameter and return a string response
-that will be returned to the client. This can be useful for generating contextual errors based on
-the contents of the request.
+points to a function which can accept a map of `:request` and `:error` as a parameter and return
+a string response that will be returned to the client. This can be useful for generating
+contextual errors based on the contents of the request.
 
 ```clj
 (ns my.ns
@@ -64,7 +64,7 @@ the contents of the request.
 (def app
   (app-handler [routes]
     :middleware [#(wrap-internal-error %
-                    :log (fn [e] (timbre/error e))
+                    :log (fn [{:keys [error]}] (timbre/error error))
                     :error-response {:status 500
                                      :headers {"Content-Type" "text/html"}
                                      :body "something bad happened!"})]))
