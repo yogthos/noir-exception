@@ -120,12 +120,13 @@
   (fn [request]
     (try (handler request)
       (catch Throwable t
-        (if log (log t) (.printStackTrace t))
-        {:status 500
-         :headers {"Content-Type" "text/html"}
-         :body (if error-response-handler
-                 (error-response-handler request)
-                 (or error-response internal-error))}))))
+        (let [info {:error t, :request request}]
+          (if log (log info) (.printStackTrace t))
+          {:status 500
+           :headers {"Content-Type" "text/html"}
+           :body (if error-response-handler
+                   (error-response-handler info)
+                   (or error-response internal-error))})))))
 
 (defn wrap-exceptions [handler & [quiet?]]
  (if quiet?
