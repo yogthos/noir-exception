@@ -123,7 +123,7 @@
         (let [info {:error t, :request request}]
           (if log (log info) (.printStackTrace t))
           {:status 500
-           :headers {"Content-Type" "text/html"}
+           :headers {"Content-Type" "text/html; charset=utf-8"}
            :body (if error-response-handler
                    (error-response-handler info)
                    (or error-response internal-error))})))))
