@@ -55,6 +55,12 @@ points to a function which can accept a map of `:request` and `:error` as a para
 a string response that will be returned to the client. This can be useful for generating
 contextual errors based on the contents of the request.
 
+It's possible to reuse the error page in your handler like this:
+```clj
+(noir-exception.core/page :error error :request request)
+```
+e.g., to send the error page by email.
+
 ```clj
 (ns my.ns
   (:require [taoensso.timbre :as timbre]
