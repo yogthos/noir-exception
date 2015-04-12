@@ -117,6 +117,21 @@
     [:p "We've dispatched a team of highly trained gnomes to take
         care of the problem."]]))
 
+(defn page [& {:keys [error request]}]
+  {:pre [(or error request)]}
+  (try
+    (layout
+      [:h1.internal-error "Internal Error: 500"]
+      [:div
+        (if error (stack-trace (parse-ex error)))
+        (if request
+          (list
+            [:h2 "Request"]
+            (edn->html request)))])
+    (catch Throwable ex
+      (.printStackTrace ex)
+      internal-error)))
+
 (defn wrap-internal-error [handler & {:keys [log error-response error-response-handler]}]
   (fn [request]
     (try (handler request)
@@ -139,14 +154,4 @@
          (.printStackTrace e)
          {:status 500
           :headers {"Content-Type" "text/html"}
-          :body (try
-                  (layout
-                   [:h1.internal-error "Internal Error: 500"]
-                   [:div
-                    (stack-trace (parse-ex e))
-
-                    [:h2 "Request"]
-                    (edn->html request)])
-                  (catch Throwable ex
-                    (.printStackTrace ex)
-                    internal-error))})))))
+          :body (page :error e :request request)})))))
