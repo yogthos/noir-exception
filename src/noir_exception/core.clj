@@ -59,8 +59,9 @@
       (for [cause causes :while cause]
         [:div.cause
           (try
-            [:h3 "Caused by: " (:class cause) " - " (:message cause)]
-            [:table (map exception-item (:trimmed-elems cause))]
+            (list
+              [:h2 "Caused by: " (:class cause) " - " (:message cause)]
+              [:table (map exception-item (:trimmed-elems cause))])
             (catch Throwable e))])])
 
 (defn route-fn? [k]
