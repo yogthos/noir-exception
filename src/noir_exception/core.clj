@@ -110,27 +110,40 @@
     :causes (for [cause causes :while cause]
               (assoc cause :trimmed-elems (map ex-item (:trimmed-elems cause))))}))
 
-(def internal-error
- (layout
-   [:div.internal-error
-    [:h1 "Something very bad has happened."]
-    [:p "We've dispatched a team of highly trained gnomes to take
-        care of the problem."]]))
-
-(defn page [& {:keys [error request]}]
-  {:pre [(or error request)]}
+(defn error-html [error]
   (try
-    (layout
-      [:h1.internal-error "Internal Error: 500"]
-      [:div
-        (if error (stack-trace (parse-ex error)))
-        (if request
-          (list
-            [:h2 "Request"]
-            (edn->html request)))])
+    (stack-trace (parse-ex error))
     (catch Throwable ex
+      (println "There was a problem parsing the exception: ")
       (.printStackTrace ex)
-      internal-error)))
+      [:p "There was a problem presenting the error."])))
+
+(defn request-html [request]
+  (try
+    (list
+      [:h2 "Request"]
+      (edn->html request))
+    (catch Throwable ex
+      (println "There was a problem parsing the request: ")
+      (.printStackTrace ex)
+      [:p "There was a problem presenting the request."])))
+
+(defn prod-page [& {:keys [h msg]}]
+  (layout
+    [:div.internal-error
+      [:h1 (or h "Something very bad has happened.")]
+      [:p (or msg
+              "We've dispatched a team of highly trained 
+              gnomes to take care of the problem.")]]))
+
+(defn dev-page [& {:keys [error request]}]
+  {:pre [(or error request)]}
+  (layout
+    [:h1.internal-error "Internal Error: 500"]
+    [:div
+      (list
+        (some-> error error-html)
+        (some-> request request-html))]))
 
 (defn wrap-internal-error [handler & {:keys [log error-response error-response-handler]}]
   (fn [request]
@@ -142,7 +155,7 @@
            :headers {"Content-Type" "text/html; charset=utf-8"}
            :body (if error-response-handler
                    (error-response-handler info)
-                   (or error-response internal-error))})))))
+                   (or error-response (prod-page)))})))))
 
 (defn wrap-exceptions [handler & [quiet?]]
  (if quiet?
@@ -152,6 +165,7 @@
        (handler request)
        (catch Exception e
          (.printStackTrace e)
+         (println "request " request)
          {:status 500
           :headers {"Content-Type" "text/html"}
-          :body (page :error e :request request)})))))
+          :body (dev-page :error e :request request)})))))
