@@ -43,23 +43,17 @@ If you always want to show the stack traces, just use `wrap-exceptions`.
 
 The `wrap-internal-error` function allows catching errors and producing a standard error page.
 This function should be used for handling errors in production, where you do not wish to expose
-the internals of the application to the user. The function will print the stack trace to standard
-out by default.
+the internals of the application to the user. The function will print the stack trace 
+and request to standard out by default.
 
 The function accepts two keyword arguments, named `:log`  and `:error-response`. The first
 allows providing a custom log function for the exceptions and the second can be used to supply
 a custom error response.
 
 Alternatively to `:error-response`, it's possible to supply the `:error-response-handler` key that
-points to a function which can accept a map of `:request` and `:error` as a parameter and return
+points to a function which can accept `:request` and `:error` as parameters and return
 a string response that will be returned to the client. This can be useful for generating
 contextual errors based on the contents of the request.
-
-It's possible to reuse the error page in your handler like this:
-```clj
-(noir-exception.core/page :error error :request request)
-```
-e.g., to send the error page by email.
 
 ```clj
 (ns my.ns
@@ -76,4 +70,16 @@ e.g., to send the error page by email.
                                      :body "something bad happened!"})]))
 ```
 
+It's possible to reuse the error page in your handler like this:
+```clj
+(noir-exception.core/dev-page :error error :request request)
+```
+e.g., to send the error page to the developer by email.
 
+It's also possible to reuse the production page:
+```clj
+(noir-exception.core/prod-page :h "We did something dumb"
+                               :msg "Trained monkeys are fixing this mess")
+(noir-exception.core/prod-page) ; uses library default messages
+```
+e.g., to present a custom message to your users.
